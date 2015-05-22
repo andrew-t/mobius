@@ -1,2 +1,21 @@
 ---
 ---
+.main {
+	position: absolute;
+	top: 5vmin;
+	left: 5vmin;
+	width: calc(100vw - 10vmin);
+	height: calc(100vh - 10vmin);
+	background: #dfd;
+	text-align: center;
+	font-size: 10vmin;
+	font-family: sans-serif;
+	line-height: 90vmin;
+}
+.buffer {
+	position: absolute;
+	top: 300%;
+	left: 300%;
+	width: 1px;
+	height: 1px;
+}
