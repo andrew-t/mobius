@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	window.addEventListener('scroll', update);
 
 	function reset() {
-		update();
 		document.body.scrollLeft = document.body.clientWidth;
 		document.body.scrollTop = document.body.clientHeight;
 		update();
@@ -56,9 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function i() {
-		return $M([ [  1,  0,  0 ],
-		            [  0,  1,  0 ],
-		            [  0,  0,  0 ] ]);
+		return Sylvester.Matrix.I();
 	}
 	function hFlip() {
 		return $M([ [ -1,  0,  0 ],
