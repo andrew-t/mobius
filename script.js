@@ -25,7 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
 				horizontal: i(),
 				vertical: i()
 			},
-			klein: {
+			'h-klein': {
+				horizontal: vFlip(),
+				vertical: i()
+			},
+			'v-klein': {
+				horizontal: i(),
+				vertical: hFlip()
+			},
+			rp2: {
 				horizontal: vFlip(),
 				vertical: hFlip()
 			}
