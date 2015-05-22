@@ -1,8 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
 	var current = i(),
-		horizontal = vFlip(),
-		vertical = hFlip(),
-		layers = content();
+		layers = content(),
+		topology = {
+			torus: {
+				horizontal: i(),
+				vertical: i()
+			},
+			klein: {
+				horizontal: vFlip(),
+				vertical: hFlip()
+			}
+		}[layers[0][0].getAttribute('data-topology')];
 
 	reset();
 	window.addEventListener('resize', reset);
@@ -18,24 +26,24 @@ document.addEventListener('DOMContentLoaded', function() {
 	function update() {
 		if (document.body.scrollLeft < document.body.clientWidth) {
 			document.body.scrollLeft += document.body.clientWidth;
-			current = current.x(horizontal);
+			current = current.x(topology.horizontal);
 		}
 		if (document.body.scrollLeft >= 2 * document.body.clientWidth) {
 			document.body.scrollLeft -= document.body.clientWidth;
-			current = current.x(horizontal);
+			current = current.x(topology.horizontal);
 		}
 		if (document.body.scrollTop < document.body.clientHeight) {
 			document.body.scrollTop += document.body.clientHeight;
-			current = current.x(vertical);
+			current = current.x(topology.vertical);
 		}
 		if (document.body.scrollTop >= 2 * document.body.clientHeight) {
 			document.body.scrollTop -= document.body.clientHeight;
-			current = current.x(vertical);
+			current = current.x(topology.vertical);
 		}
 		t(0, 0, prod(current));
-		t(1, 0, prod(current, horizontal));
-		t(0, 1, prod(current, vertical));
-		t(1, 1, prod(current, horizontal, vertical));
+		t(1, 0, prod(current, topology.horizontal));
+		t(0, 1, prod(current, topology.vertical));
+		t(1, 1, prod(current, topology.horizontal, topology.vertical));
 	}
 
 	function content() {
