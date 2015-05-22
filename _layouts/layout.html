@@ -1,14 +1,14 @@
 <html>
 	<head>
-		<title>andrewt.net / mobius</title>
+		<title>andrewt.net / mobius # {{ page.title }}</title>
 		<script type="text/javascript" src="sylvester/src/sylvester.js"></script>
 		<script type="text/javascript" src="sylvester/src/matrix.js"></script>
 		<script type="text/javascript" src="script.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
-		<div class="main" data-topology="v-cylinder">
-			THIS WAY UP
+		<div class="main" data-topology="{{ page.topology }}">
+			{{ content }}
 		</div>
 	</body>
 </html>

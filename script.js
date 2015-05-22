@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (topology.horizontal)
 			buffer.style.left = '300vw';
 		if (topology.vertical)
-			buffer.style.left = '300vh';
+			buffer.style.top = '300vh';
 		return [ [ layers[0], layers[1] ],
 		         [ layers[2], layers[3] ] ];
 	}
