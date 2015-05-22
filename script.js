@@ -1,7 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
 	var current = i(),
-		layers = content(),
 		topology = {
+			square: {
+				horizontal: null,
+				vertical: null
+			},
+			'h-cylinder': {
+				horizontal: i(),
+				vertical: null
+			},
+			'v-cylinder': {
+				horizontal: null,
+				vertical: i()
+			},
+			'h-mobius': {
+				horizontal: vFlip(),
+				vertical: null
+			},
+			'v-mobius': {
+				horizontal: null,
+				vertical: hFlip()
+			},
 			torus: {
 				horizontal: i(),
 				vertical: i()
@@ -10,52 +29,65 @@ document.addEventListener('DOMContentLoaded', function() {
 				horizontal: vFlip(),
 				vertical: hFlip()
 			}
-		}[layers[0][0].getAttribute('data-topology')];
+		}[document.getElementsByClassName('main')[0]
+		          .getAttribute('data-topology')],
+		layers = content();
 
 	reset();
 	window.addEventListener('resize', reset);
 	window.addEventListener('scroll', update);
 
 	function reset() {
-		document.body.scrollLeft = document.body.clientWidth;
-		document.body.scrollTop = document.body.clientHeight;
+		if (topology.horizontal)
+			document.body.scrollLeft = document.body.clientWidth;
+		if (topology.vertical)
+			document.body.scrollTop = document.body.clientHeight;
 		update();
 	}
 
 	function update() {
-		if (document.body.scrollLeft < document.body.clientWidth) {
-			document.body.scrollLeft += document.body.clientWidth;
-			current = current.x(topology.horizontal);
+		if (topology.horizontal) {
+			if (document.body.scrollLeft < document.body.clientWidth) {
+				document.body.scrollLeft += document.body.clientWidth;
+				current = current.x(topology.horizontal);
+			}
+			if (document.body.scrollLeft >= 2 * document.body.clientWidth) {
+				document.body.scrollLeft -= document.body.clientWidth;
+				current = current.x(topology.horizontal);
+			}
 		}
-		if (document.body.scrollLeft >= 2 * document.body.clientWidth) {
-			document.body.scrollLeft -= document.body.clientWidth;
-			current = current.x(topology.horizontal);
+		if (topology.vertical) {
+			if (document.body.scrollTop < document.body.clientHeight) {
+				document.body.scrollTop += document.body.clientHeight;
+				current = current.x(topology.vertical);
+			}
+			if (document.body.scrollTop >= 2 * document.body.clientHeight) {
+				document.body.scrollTop -= document.body.clientHeight;
+				current = current.x(topology.vertical);
+			}
 		}
-		if (document.body.scrollTop < document.body.clientHeight) {
-			document.body.scrollTop += document.body.clientHeight;
-			current = current.x(topology.vertical);
-		}
-		if (document.body.scrollTop >= 2 * document.body.clientHeight) {
-			document.body.scrollTop -= document.body.clientHeight;
-			current = current.x(topology.vertical);
-		}
-		t(0, 0, prod(current));
-		t(1, 0, prod(current, topology.horizontal));
-		t(0, 1, prod(current, topology.vertical));
-		t(1, 1, prod(current, topology.horizontal, topology.vertical));
+		t(0, 0);
+		t(1, 0, topology.horizontal);
+		t(0, 1, topology.vertical);
+		t(1, 1, topology.horizontal, topology.vertical);
 	}
 
 	function content() {
 		var body = document.getElementsByTagName('body')[0],
 			twice = body.innerHTML + body.innerHTML;
-		body.innerHTML = twice + twice + '<div class="buffer"></div>';
-		var layers = document.getElementsByClassName('main');
+		body.innerHTML = twice + twice + '<div id="buffer"></div>';
+		var buffer = document.getElementById('buffer'),
+			layers = document.getElementsByClassName('main');
+		if (topology.horizontal)
+			buffer.style.left = '300vw';
+		if (topology.vertical)
+			buffer.style.left = '300vh';
 		return [ [ layers[0], layers[1] ],
 		         [ layers[2], layers[3] ] ];
 	}
 
 	function i() {
-		return Sylvester.Matrix.I();
+		return Sylvester.Matrix.I(3);
 	}
 	function hFlip() {
 		return $M([ [ -1,  0,  0 ],
@@ -69,18 +101,28 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function prod() {
-		if (arguments.length == 0)
+		var m = (arguments.length == 1 && arguments[0] instanceof Array)
+			? arguments[0]
+			: arguments;
+		if (m.length == 0)
 			return i();
-		var o = $M(arguments[0].elements);
-		for (var n = 1; n < arguments.length; ++n)
-			o = o.x(arguments[n]);
+		var o = $M(m[0].elements);
+		for (var n = 1; n < m.length; ++n)
+			o = o.x(m[n]);
 		return o;
 	}
 
-	function t(x, y, m) {
+	function t(x, y) {
+		var matrices = [ current ];
+		for (var i = 2; i < arguments.length; ++i)
+			if (arguments[i])
+				matrices.push(arguments[i]);
+			else return;
 		layers[x][y].style.transform = 
-			'translate(' + (x * 100 + 100) + 'vw, ' + (y * 100 + 100) + 'vh) ' +
-			'matrix(' + m.elements.map(function(row) {
+			'translate(' + 
+				(topology.horizontal ? x * 100 + 100 : 0) + 'vw, ' +
+				(topology.vertical ? y * 100 + 100 : 0) + 'vh) ' +
+			'matrix(' + prod(matrices).elements.map(function(row) {
 				return row[0] + ',' + row[1];
 			}).join() + ')';
 	}
