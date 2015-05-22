@@ -109,7 +109,13 @@ document.addEventListener('DOMContentLoaded', function() {
 		for (var i = 2; i < arguments.length; ++i)
 			if (arguments[i])
 				matrix = matrix.x(arguments[i]);
-			else return;
+			else {
+				if (layers[x][y]) {
+					document.body.removeChild(layers[x][y]);
+					layers[x][y] = null;
+				}
+				return;
+			}
 		layers[x][y].style.transform = 
 			'translate(' + 
 				(topology.horizontal ? x * 100 + 100 : 0) + 'vw, ' +
