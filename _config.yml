@@ -1,8 +1,5 @@
 # Site settings
-baseurl: "/mobius/" # the subpath of your site, e.g. /blog/
-url: "http://github.andrewt.net" # the base hostname & protocol for your site
+baseurl: "/mobius"
 
 # Build settings
 markdown: kramdown
-
-permalink: /:title/
