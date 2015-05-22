@@ -73,9 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	}
 
 	function content() {
-		var body = document.getElementsByTagName('body')[0],
-			twice = body.innerHTML + body.innerHTML;
-		body.innerHTML = twice + twice + '<div id="buffer"></div>';
 		var buffer = document.getElementById('buffer'),
 			layers = document.getElementsByClassName('main');
 		if (topology.horizontal)
