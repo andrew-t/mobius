@@ -29,8 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				horizontal: vFlip(),
 				vertical: hFlip()
 			}
-		}[document.getElementsByClassName('main')[0]
-		          .getAttribute('data-topology')],
+		}[document.body.getAttribute('data-topology')],
 		layers = content();
 
 	reset();
@@ -97,29 +96,17 @@ document.addEventListener('DOMContentLoaded', function() {
 		            [  0,  0,  0 ] ]);
 	}
 
-	function prod() {
-		var m = (arguments.length == 1 && arguments[0] instanceof Array)
-			? arguments[0]
-			: arguments;
-		if (m.length == 0)
-			return i();
-		var o = $M(m[0].elements);
-		for (var n = 1; n < m.length; ++n)
-			o = o.x(m[n]);
-		return o;
-	}
-
 	function t(x, y) {
-		var matrices = [ current ];
+		var matrix = current;
 		for (var i = 2; i < arguments.length; ++i)
 			if (arguments[i])
-				matrices.push(arguments[i]);
+				matrix = matrix.x(arguments[i]);
 			else return;
 		layers[x][y].style.transform = 
 			'translate(' + 
 				(topology.horizontal ? x * 100 + 100 : 0) + 'vw, ' +
 				(topology.vertical ? y * 100 + 100 : 0) + 'vh) ' +
-			'matrix(' + prod(matrices).elements.map(function(row) {
+			'matrix(' + matrix.elements.map(function(row) {
 				return row[0] + ',' + row[1];
 			}).join() + ')';
 	}

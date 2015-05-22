@@ -6,19 +6,11 @@
 		<script type="text/javascript" src="script.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
-	<body>
-		<div class="main" data-topology="{{ page.topology }}">
-			{{ content }}
-		</div>
-		<div class="main" data-topology="{{ page.topology }}">
-			{{ content }}
-		</div>
-		<div class="main" data-topology="{{ page.topology }}">
-			{{ content }}
-		</div>
-		<div class="main" data-topology="{{ page.topology }}">
-			{{ content }}
-		</div>
+	<body data-topology="{{ page.topology }}">
+		<div class="main">{{ content }}</div>
+		<div class="main">{{ content }}</div>
+		<div class="main">{{ content }}</div>
+		<div class="main">{{ content }}</div>
 		<div id="buffer"></div>
 	</body>
 </html>
